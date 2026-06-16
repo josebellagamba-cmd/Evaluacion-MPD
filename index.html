@@ -1,77 +1,88 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación MPD – Tánica</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4f8;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
+.wrap{width:100%;max-width:680px}
 .screen{display:none}
 .screen.active{display:block}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem}
-.header{background:#1a3a5c;color:#fff;border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0;padding:1.5rem 1.5rem 1rem;margin-bottom:0}
-.header h1{font-size:18px;font-weight:500;margin-bottom:4px}
-.header p{font-size:13px;opacity:0.8}
+.header{background:#1a3a5c;color:#fff;border-radius:12px 12px 0 0;padding:1.5rem 1.5rem 1rem}
+.header h1{font-size:20px;font-weight:600;margin-bottom:4px}
+.header p{font-size:13px;opacity:0.75}
+.card{background:#fff;border-radius:0 0 12px 12px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
 .field{margin-bottom:1rem}
-.field label{display:block;font-size:13px;color:var(--color-text-secondary);margin-bottom:6px}
-.field input{width:100%;padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;background:var(--color-background-primary);color:var(--color-text-primary)}
-.btn{padding:10px 20px;border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.field label{display:block;font-size:13px;color:#555;margin-bottom:6px;font-weight:500}
+.field input{width:100%;padding:9px 13px;border:1px solid #d0d5dd;border-radius:8px;font-size:14px;color:#1a1a1a;transition:border-color 0.15s}
+.field input:focus{outline:none;border-color:#1a3a5c;box-shadow:0 0 0 3px rgba(26,58,92,0.1)}
+.btn{padding:10px 22px;border-radius:8px;font-size:14px;cursor:pointer;border:1px solid #d0d5dd;background:#fff;color:#1a1a1a;font-weight:500;transition:all 0.15s}
+.btn:hover{background:#f5f5f5}
 .btn-primary{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
 .btn-primary:hover{background:#15304f}
 .btn-sm{padding:6px 14px;font-size:13px}
-.btn-danger{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger)}
-.progress-bar{height:6px;background:var(--color-background-secondary);border-radius:3px;margin-bottom:1.5rem}
+.btn-danger{background:#fff0f0;color:#c0392b;border-color:#f5c6c6}
+.progress-bar{height:6px;background:#e8edf2;border-radius:3px;margin-bottom:1.5rem}
 .progress-fill{height:100%;background:#1a3a5c;border-radius:3px;transition:width 0.3s}
-.q-block{margin-bottom:1.5rem}
-.case-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:#1a3a5c;margin-bottom:8px}
-.case-box{background:var(--color-background-secondary);border-left:3px solid #1a3a5c;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-bottom:1rem;font-size:14px;line-height:1.6;color:var(--color-text-primary)}
-.q-text{font-size:15px;font-weight:500;margin-bottom:1rem;line-height:1.5}
-.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;cursor:pointer;transition:border-color 0.15s,background 0.15s}
-.option:hover{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
-.option.selected{border-color:#1a3a5c;background:#e6f1fb}
-.option input[type=radio]{margin-top:2px;flex-shrink:0}
-.option-text{font-size:14px;line-height:1.4}
+.case-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#1a3a5c;margin-bottom:8px}
+.case-box{background:#f0f4f8;border-left:3px solid #1a3a5c;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:1rem;font-size:14px;line-height:1.65;color:#333}
+.q-text{font-size:15px;font-weight:600;margin-bottom:1rem;line-height:1.5;color:#1a1a1a}
+.option{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1px solid #e0e6ed;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s,background 0.15s}
+.option:hover{border-color:#1a3a5c;background:#f5f8fc}
+.option.selected{border-color:#1a3a5c;background:#eaf1f8}
+.option input[type=radio]{margin-top:2px;flex-shrink:0;accent-color:#1a3a5c}
+.option-text{font-size:14px;line-height:1.45;color:#333}
 .result-box{text-align:center;padding:2rem 1rem}
-.result-icon{font-size:48px;margin-bottom:1rem}
-.result-score{font-size:32px;font-weight:500;margin-bottom:0.5rem}
-.result-label{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
-.badge{display:inline-block;padding:4px 12px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500}
-.badge-success{background:var(--color-background-success);color:var(--color-text-success)}
-.badge-danger{background:var(--color-background-danger);color:var(--color-text-danger)}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
-.metric-val{font-size:26px;font-weight:500}
-.metric-lbl{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.result-icon{font-size:52px;margin-bottom:1rem}
+.result-score{font-size:34px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.result-label{font-size:14px;color:#666;margin-bottom:1.5rem}
+.badge{display:inline-block;padding:5px 16px;border-radius:20px;font-size:13px;font-weight:600}
+.badge-success{background:#e6f9f1;color:#1a7a4a}
+.badge-danger{background:#fff0f0;color:#c0392b}
+.metric{background:#f0f4f8;border-radius:8px;padding:1rem;text-align:center}
+.metric-val{font-size:28px;font-weight:700;color:#1a3a5c}
+.metric-lbl{font-size:12px;color:#666;margin-top:3px}
 .grid-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500}
-td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+th{text-align:left;padding:9px 10px;border-bottom:1px solid #e8edf2;color:#666;font-weight:600;background:#fafbfc}
+td{padding:9px 10px;border-bottom:1px solid #f0f4f8;vertical-align:top;color:#333}
 tr:last-child td{border-bottom:none}
-.ans-block{margin-bottom:8px;font-size:12px}
-.ans-q{color:var(--color-text-secondary);margin-bottom:2px}
-.ans-r{color:var(--color-text-primary)}
-.correct{color:var(--color-text-success)}
-.incorrect{color:var(--color-text-danger)}
-.tab-bar{display:flex;gap:8px;margin-bottom:1.5rem}
-.tab{padding:7px 16px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary)}
-.tab.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
-.filter-row{display:flex;gap:8px;margin-bottom:1rem;align-items:center}
-.filter-row input,.filter-row select{padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary)}
-.filter-row input{flex:1}
-.detail-panel{display:none;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-top:8px}
+.detail-panel{display:none;background:#f8fafc;border-radius:8px;padding:1rem;margin-top:6px}
 .detail-panel.open{display:block}
-.nav-link{font-size:13px;color:#1a3a5c;cursor:pointer;text-decoration:underline;margin-right:12px}
-.err{font-size:12px;color:var(--color-text-danger);margin-top:4px}
-.rut-hint{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.ans-block{margin-bottom:10px;font-size:12px}
+.ans-q{color:#888;margin-bottom:3px;font-weight:500}
+.correct{color:#1a7a4a;font-weight:500}
+.incorrect{color:#c0392b;font-weight:500}
+.tab-bar{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 16px;border-radius:20px;font-size:13px;cursor:pointer;border:1px solid #e0e6ed;background:#fff;color:#666;font-weight:500;transition:all 0.15s}
+.tab.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.filter-row{display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.filter-row input,.filter-row select{padding:8px 11px;border-radius:8px;border:1px solid #d0d5dd;font-size:13px;color:#333;background:#fff}
+.filter-row input{flex:1;min-width:180px}
+.nav-link{font-size:13px;color:#1a3a5c;cursor:pointer;text-decoration:underline}
+.err{font-size:12px;color:#c0392b;margin-top:4px}
+.hint{font-size:11px;color:#888;margin-top:3px}
+.divider{height:1px;background:#e8edf2;margin:1.5rem 0}
+.ans-correct-note{font-size:11px;color:#888;margin-top:3px}
+@media(max-width:500px){
+  .grid-metrics{grid-template-columns:1fr 1fr}
+  body{padding:1rem 0.5rem}
+}
 </style>
-
-<h2 class="sr-only">Evaluación Modelo de Prevención del Delito – Tánica</h2>
+</head>
+<body>
+<div class="wrap">
 
 <div id="s-welcome" class="screen active">
   <div class="header">
     <h1>Evaluación: Modelo de Prevención del Delito</h1>
     <p>Tánica · Capacitación interna</p>
   </div>
-  <div class="card" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
-    <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.6">
-      Completa tus datos para iniciar. La evaluación tiene 5 casos prácticos de alternativas. Se requiere responder correctamente 4 de 5 para aprobar.
-    </p>
+  <div class="card">
+    <p style="font-size:14px;color:#555;margin-bottom:1.5rem;line-height:1.65">Completa tus datos para iniciar. La evaluación tiene 5 casos prácticos con alternativas. Se requiere responder correctamente 4 de 5 para aprobar.</p>
     <div class="field">
       <label>Nombre completo</label>
       <input type="text" id="inp-nombre" placeholder="Ej: María González" autocomplete="off">
@@ -80,7 +91,7 @@ tr:last-child td{border-bottom:none}
     <div class="field">
       <label>RUT</label>
       <input type="text" id="inp-rut" placeholder="Ej: 12.345.678-9" autocomplete="off">
-      <div class="rut-hint">Formato: 12.345.678-9</div>
+      <div class="hint">Formato: 12.345.678-9</div>
       <div class="err" id="err-rut"></div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem">
@@ -95,10 +106,10 @@ tr:last-child td{border-bottom:none}
     <h1>Evaluación MPD</h1>
     <p id="q-counter">Caso 1 de 5</p>
   </div>
-  <div class="card" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+  <div class="card">
     <div class="progress-bar"><div class="progress-fill" id="prog" style="width:20%"></div></div>
     <div id="q-area"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:1.5rem">
+    <div style="display:flex;justify-content:flex-end;margin-top:1.5rem">
       <button class="btn btn-primary" id="btn-next" onclick="nextQ()">Siguiente →</button>
     </div>
   </div>
@@ -109,7 +120,7 @@ tr:last-child td{border-bottom:none}
     <h1>Resultado</h1>
     <p id="res-name-hdr"></p>
   </div>
-  <div class="card" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+  <div class="card">
     <div class="result-box">
       <div class="result-icon" id="res-icon"></div>
       <div class="result-score" id="res-score"></div>
@@ -128,7 +139,7 @@ tr:last-child td{border-bottom:none}
     <h1>Acceso administrador</h1>
     <p>Panel de resultados</p>
   </div>
-  <div class="card" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+  <div class="card">
     <div class="field">
       <label>Contraseña</label>
       <input type="password" id="inp-pwd" placeholder="Ingresa la contraseña">
@@ -146,24 +157,25 @@ tr:last-child td{border-bottom:none}
     <h1>Panel de administración</h1>
     <p>Evaluación MPD – Tánica</p>
   </div>
-  <div class="card" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+  <div class="card">
     <div class="tab-bar">
       <div class="tab active" id="tab-resumen" onclick="switchTab('resumen')">Resumen</div>
       <div class="tab" id="tab-detalle" onclick="switchTab('detalle')">Participantes</div>
       <div class="tab" id="tab-preguntas" onclick="switchTab('preguntas')">Por caso</div>
     </div>
-
     <div id="panel-resumen">
       <div class="grid-metrics">
         <div class="metric"><div class="metric-val" id="m-total">0</div><div class="metric-lbl">Participantes</div></div>
         <div class="metric"><div class="metric-val" id="m-aprobados">0</div><div class="metric-lbl">Aprobados</div></div>
         <div class="metric"><div class="metric-val" id="m-tasa">0%</div><div class="metric-lbl">Tasa aprobación</div></div>
       </div>
-      <div id="chart-pregs" style="margin-bottom:1rem"></div>
-      <button class="btn btn-sm btn-danger" onclick="clearData()">Borrar todos los datos</button>
-      <span class="nav-link" style="margin-left:12px" onclick="showScreen('s-welcome')">← Salir</span>
+      <div id="chart-pregs" style="margin-bottom:1.5rem"></div>
+      <div class="divider"></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-danger" onclick="clearData()">Borrar todos los datos</button>
+        <span class="nav-link" onclick="showScreen('s-welcome')">← Salir</span>
+      </div>
     </div>
-
     <div id="panel-detalle" style="display:none">
       <div class="filter-row">
         <input type="text" id="f-nombre" placeholder="Filtrar por nombre o RUT..." oninput="renderTable()">
@@ -175,182 +187,74 @@ tr:last-child td{border-bottom:none}
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Nombre</th><th>RUT</th><th>Puntaje</th><th>Estado</th><th>Fecha</th><th></th>
-            </tr>
-          </thead>
+          <thead><tr><th>Nombre</th><th>RUT</th><th>Puntaje</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
           <tbody id="tbl-body"></tbody>
         </table>
       </div>
     </div>
-
     <div id="panel-preguntas" style="display:none">
       <div id="q-stats"></div>
     </div>
   </div>
 </div>
 
+</div>
+
 <script>
-const QUESTIONS = [
-  {
-    caso: "Caso 1 – Compras sin respaldo",
-    situacion: "Pedro, del área de mantención, necesita comprar materiales urgentes. Un proveedor le dice que puede entregarlos hoy si Pedro le transfiere el dinero ahora y después regulariza la orden de compra.",
-    t: "¿Qué debe hacer Pedro?",
-    opts: [
-      "Aceptar, porque es urgente y después se regulariza",
-      "Rechazar: las compras deben aprobarse antes de ejecutarse, sin excepciones",
-      "Pedirle al proveedor una boleta después y archivarla",
-      "Consultar con un compañero si le parece razonable"
-    ],
-    correct: 1
-  },
-  {
-    caso: "Caso 2 – Regalo de proveedor",
-    situacion: "Ana trabaja en logística. Un proveedor con quien trabaja frecuentemente le trae una caja de vinos en Navidad como \"gesto de agradecimiento\".",
-    t: "¿Qué corresponde hacer?",
-    opts: [
-      "Aceptarlo, es solo un regalo navideño sin importancia",
-      "Compartirlo con el equipo para que no quede solo en ella",
-      "Rechazarlo: la política de Tánica prohíbe aceptar regalos de proveedores",
-      "Guardarlo y no comentarlo para evitar problemas"
-    ],
-    correct: 2
-  },
-  {
-    caso: "Caso 3 – Rendición incompleta",
-    situacion: "Carlos rinde sus gastos del mes pero no tiene todas las boletas. Decide incluir un par de boletas de compras personales \"para completar el monto\" y así no perder el reembolso.",
-    t: "¿Qué está haciendo Carlos?",
-    opts: [
-      "Algo comprensible, todos lo hacen cuando les faltan papeles",
-      "Una infracción grave: está falsificando una rendición, lo que puede tener consecuencias disciplinarias",
-      "Una práctica administrativa menor sin mayor consecuencia",
-      "Algo permitido si el monto es pequeño"
-    ],
-    correct: 1
-  },
-  {
-    caso: "Caso 4 – Contacto con funcionario público",
-    situacion: "Valentina debe coordinar una visita de un inspector de la municipalidad a las instalaciones de Tánica. Un compañero le sugiere \"llevar un detalle\" al inspector para que la visita sea más fluida.",
-    t: "¿Qué debe hacer Valentina?",
-    opts: [
-      "Seguir el consejo: es solo una cortesía, no un soborno",
-      "Rechazar la idea, coordinar la visita de forma transparente y consultar al responsable de compliance si tiene dudas",
-      "Decidir sola según cómo vea la situación ese día",
-      "Evitar la visita hasta que alguien más se haga cargo"
-    ],
-    correct: 1
-  },
-  {
-    caso: "Caso 5 – Alerta ignorada",
-    situacion: "Miguel nota que su jefatura aprueba pagos repetidos a un proveedor que no reconoce, sin que haya órdenes de compra asociadas. Piensa en comentarlo, pero decide no hacerlo para no generar conflictos.",
-    t: "¿Qué debería haber hecho Miguel?",
-    opts: [
-      "Nada, no es su área y podría meterse en problemas",
-      "Esperar a que alguien con más antigüedad lo reporte",
-      "Levantar la alerta a través del canal de denuncias: denunciar de buena fe es una conducta protegida y esperada",
-      "Hablar directamente con el proveedor para entender la situación"
-    ],
-    correct: 2
-  }
+var QUESTIONS=[
+  {caso:"Caso 1 – Compras sin respaldo",situacion:"Pedro, del área de mantención, necesita comprar materiales urgentes. Un proveedor le dice que puede entregarlos hoy si Pedro le transfiere el dinero ahora y después regulariza la orden de compra.",t:"¿Qué debe hacer Pedro?",opts:["Aceptar, porque es urgente y después se regulariza","Rechazar: las compras deben aprobarse antes de ejecutarse, sin excepciones","Pedirle al proveedor una boleta después y archivarla","Consultar con un compañero si le parece razonable"],correct:1},
+  {caso:"Caso 2 – Regalo de proveedor",situacion:'Ana trabaja en logística. Un proveedor con quien trabaja frecuentemente le trae una caja de vinos en Navidad como "gesto de agradecimiento".',t:"¿Qué corresponde hacer?",opts:["Aceptarlo, es solo un regalo navideño sin importancia","Compartirlo con el equipo para que no quede solo en ella","Rechazarlo: la política de Tánica prohíbe aceptar regalos de proveedores","Guardarlo y no comentarlo para evitar problemas"],correct:2},
+  {caso:"Caso 3 – Rendición incompleta",situacion:'Carlos rinde sus gastos del mes pero no tiene todas las boletas. Decide incluir un par de boletas de compras personales "para completar el monto" y así no perder el reembolso.',t:"¿Qué está haciendo Carlos?",opts:["Algo comprensible, todos lo hacen cuando les faltan papeles","Una infracción grave: está falsificando una rendición, lo que puede tener consecuencias disciplinarias","Una práctica administrativa menor sin mayor consecuencia","Algo permitido si el monto es pequeño"],correct:1},
+  {caso:"Caso 4 – Contacto con funcionario público",situacion:'Valentina debe coordinar una visita de un inspector de la municipalidad a las instalaciones de Tánica. Un compañero le sugiere "llevar un detalle" al inspector para que la visita sea más fluida.',t:"¿Qué debe hacer Valentina?",opts:["Seguir el consejo: es solo una cortesía, no un soborno","Rechazar la idea, coordinar la visita de forma transparente y consultar al responsable de compliance si tiene dudas","Decidir sola según cómo vea la situación ese día","Evitar la visita hasta que alguien más se haga cargo"],correct:1},
+  {caso:"Caso 5 – Alerta ignorada",situacion:"Miguel nota que su jefatura aprueba pagos repetidos a un proveedor que no reconoce, sin que haya órdenes de compra asociadas. Piensa en comentarlo, pero decide no hacerlo para no generar conflictos.",t:"¿Qué debería haber hecho Miguel?",opts:["Nada, no es su área y podría meterse en problemas","Esperar a que alguien con más antigüedad lo reporte","Levantar la alerta a través del canal de denuncias: denunciar de buena fe es una conducta protegida y esperada","Hablar directamente con el proveedor para entender la situación"],correct:2}
 ];
-const PASS_SCORE = 4;
-const ADMIN_PWD = "tanica2025";
+var PASS_SCORE=4,ADMIN_PWD="tanica2025",STORAGE_KEY="mpd_tanica_resultados";
+var userName="",userRut="",answers=[],currentQ=0;
 
-let userName="", userRut="", answers=[], currentQ=0;
-
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function formatRut(v){
-  let r=v.replace(/[^0-9kK]/g,'');
-  if(r.length<2) return r;
-  let body=r.slice(0,-1), dv=r.slice(-1);
-  body=body.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-  return body+'-'+dv.toUpperCase();
-}
-
-document.getElementById('inp-rut').addEventListener('input',function(){
-  let pos=this.selectionStart, old=this.value.length;
-  this.value=formatRut(this.value);
-  let diff=this.value.length-old;
-  this.setSelectionRange(pos+diff,pos+diff);
-});
-
-function validateRut(rut){
-  let clean=rut.replace(/[^0-9kK]/g,'');
-  if(clean.length<8||clean.length>9) return false;
-  let body=clean.slice(0,-1), dv=clean.slice(-1).toUpperCase();
-  let sum=0, mul=2;
-  for(let i=body.length-1;i>=0;i--){sum+=parseInt(body[i])*mul;mul=mul===7?2:mul+1;}
-  let expected=11-(sum%11);
-  let ev=expected===11?'0':expected===10?'K':String(expected);
-  return dv===ev;
-}
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function formatRut(v){var r=v.replace(/[^0-9kK]/g,'');if(r.length<2)return r;var body=r.slice(0,-1),dv=r.slice(-1);body=body.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return body+'-'+dv.toUpperCase();}
+document.getElementById('inp-rut').addEventListener('input',function(){var pos=this.selectionStart,old=this.value.length;this.value=formatRut(this.value);var diff=this.value.length-old;this.setSelectionRange(pos+diff,pos+diff);});
+function validateRut(rut){var clean=rut.replace(/[^0-9kK]/g,'');if(clean.length<8||clean.length>9)return false;var body=clean.slice(0,-1),dv=clean.slice(-1).toUpperCase(),sum=0,mul=2;for(var i=body.length-1;i>=0;i--){sum+=parseInt(body[i])*mul;mul=mul===7?2:mul+1;}var exp=11-(sum%11),ev=exp===11?'0':exp===10?'K':String(exp);return dv===ev;}
 
 function startEval(){
-  let n=document.getElementById('inp-nombre').value.trim();
-  let r=document.getElementById('inp-rut').value.trim();
-  let ok=true;
-  document.getElementById('err-nombre').textContent='';
-  document.getElementById('err-rut').textContent='';
+  var n=document.getElementById('inp-nombre').value.trim(),r=document.getElementById('inp-rut').value.trim(),ok=true;
+  document.getElementById('err-nombre').textContent='';document.getElementById('err-rut').textContent='';
   if(!n){document.getElementById('err-nombre').textContent='Ingresa tu nombre completo.';ok=false;}
   if(!r){document.getElementById('err-rut').textContent='Ingresa tu RUT.';ok=false;}
-  else if(!validateRut(r)){document.getElementById('err-rut').textContent='RUT inválido. Revisa el formato.';ok=false;}
-  if(!ok) return;
-  userName=n; userRut=r; answers=[]; currentQ=0;
-  renderQ();
-  showScreen('s-eval');
+  else if(!validateRut(r)){document.getElementById('err-rut').textContent='RUT inválido. Revisa el formato (Ej: 12.345.678-9).';ok=false;}
+  if(!ok)return;
+  userName=n;userRut=r;answers=[];currentQ=0;renderQ();showScreen('s-eval');
 }
 
 function renderQ(){
-  let q=QUESTIONS[currentQ];
-  document.getElementById('q-counter').textContent=`Caso ${currentQ+1} de ${QUESTIONS.length}`;
-  document.getElementById('prog').style.width=`${((currentQ+1)/QUESTIONS.length)*100}%`;
-  let html=`<div class="q-block">
-    <div class="case-label">${q.caso}</div>
-    <div class="case-box">${q.situacion}</div>
-    <p class="q-text">${q.t}</p>`;
-  q.opts.forEach((o,i)=>{
-    let sel=answers[currentQ]===i?'selected':'';
-    html+=`<div class="option ${sel}" onclick="selectOpt(${i})">
-      <input type="radio" name="q" ${answers[currentQ]===i?'checked':''} style="pointer-events:none">
-      <span class="option-text">${o}</span>
-    </div>`;
-  });
-  html+='</div>';
+  var q=QUESTIONS[currentQ];
+  document.getElementById('q-counter').textContent='Caso '+(currentQ+1)+' de '+QUESTIONS.length;
+  document.getElementById('prog').style.width=(((currentQ+1)/QUESTIONS.length)*100)+'%';
+  var html='<div class="case-label">'+q.caso+'</div><div class="case-box">'+q.situacion+'</div><p class="q-text">'+q.t+'</p>';
+  q.opts.forEach(function(o,i){var sel=answers[currentQ]===i?' selected':'';html+='<div class="option'+sel+'" onclick="selectOpt('+i+')"><input type="radio" name="q" '+(answers[currentQ]===i?'checked':'')+' style="pointer-events:none"><span class="option-text">'+o+'</span></div>';});
   document.getElementById('q-area').innerHTML=html;
-  document.getElementById('btn-next').textContent=currentQ===QUESTIONS.length-1?'Finalizar':'Siguiente →';
+  document.getElementById('btn-next').textContent=currentQ===QUESTIONS.length-1?'Finalizar evaluación':'Siguiente →';
 }
 
-function selectOpt(i){
-  answers[currentQ]=i;
-  document.querySelectorAll('.option').forEach((el,idx)=>{
-    el.classList.toggle('selected',idx===i);
-    el.querySelector('input').checked=idx===i;
-  });
-}
+function selectOpt(i){answers[currentQ]=i;document.querySelectorAll('.option').forEach(function(el,idx){el.classList.toggle('selected',idx===i);el.querySelector('input').checked=idx===i;});}
 
 function nextQ(){
   if(answers[currentQ]===undefined){alert('Selecciona una alternativa para continuar.');return;}
-  if(currentQ<QUESTIONS.length-1){currentQ++;renderQ();}
-  else{submitEval();}
+  if(currentQ<QUESTIONS.length-1){currentQ++;renderQ();}else{submitEval();}
 }
 
-async function submitEval(){
-  let score=answers.filter((a,i)=>a===QUESTIONS[i].correct).length;
-  let passed=score>=PASS_SCORE;
-  let record={name:userName,rut:userRut,score,passed,answers:[...answers],date:new Date().toLocaleString('es-CL')};
-  try{
-    let existing=null;
-    try{let r=await window.storage.get('mpd_results');if(r)existing=JSON.parse(r.value);}catch(e){}
-    let arr=existing||[];
-    arr.push(record);
-    await window.storage.set('mpd_results',JSON.stringify(arr));
-  }catch(e){}
-  showResult(record);
+var SHEETS_URL="https://script.google.com/macros/s/AKfycbx6n4y3O8RBkvKyC8frS0b3sUdY2KWjRzGMn_nN4_-2S0vY2hEBxAX5zfLmTuI8VmvQ3A/exec";
+
+function submitEval(){
+  var score=answers.filter(function(a,i){return a===QUESTIONS[i].correct;}).length;
+  var passed=score>=PASS_SCORE;
+  var record={name:userName,rut:userRut,score:score,passed:passed,answers:answers.slice(),date:new Date().toLocaleString('es-CL')};
+  var btn=document.getElementById('btn-next');
+  btn.textContent='Enviando...';btn.disabled=true;
+  fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(record)})
+    .then(function(){showResult(record);})
+    .catch(function(){showResult(record);})
+    .finally(function(){btn.disabled=false;});
 }
 
 function showResult(rec){
@@ -358,17 +262,9 @@ function showResult(rec){
   document.getElementById('res-icon').textContent=rec.passed?'✅':'❌';
   document.getElementById('res-score').textContent=rec.score+' / '+QUESTIONS.length+' correctas';
   document.getElementById('res-label').textContent=rec.passed?'¡Evaluación aprobada!':'Evaluación no aprobada (se requieren '+PASS_SCORE+' correctas)';
-  document.getElementById('res-badge').innerHTML=`<span class="badge ${rec.passed?'badge-success':'badge-danger'}">${rec.passed?'APROBADO':'REPROBADO'}</span>`;
-  let det='<div style="margin-top:1.5rem"><p style="font-size:13px;font-weight:500;margin-bottom:0.75rem;color:var(--color-text-secondary)">Detalle de respuestas</p>';
-  QUESTIONS.forEach((q,i)=>{
-    let ok=rec.answers[i]===q.correct;
-    det+=`<div style="margin-bottom:0.75rem;padding:10px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">
-      <p style="font-size:11px;font-weight:500;color:#1a3a5c;margin-bottom:4px">${q.caso}</p>
-      <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">${q.t}</p>
-      <p style="font-size:13px" class="${ok?'correct':'incorrect'}">${ok?'✓':'✗'} ${q.opts[rec.answers[i]]}</p>
-      ${!ok?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:3px">Respuesta correcta: ${q.opts[q.correct]}</p>`:''}
-    </div>`;
-  });
+  document.getElementById('res-badge').innerHTML='<span class="badge '+(rec.passed?'badge-success':'badge-danger')+'">'+(rec.passed?'APROBADO':'REPROBADO')+'</span>';
+  var det='<div style="margin-top:1.5rem"><p style="font-size:13px;font-weight:600;margin-bottom:0.75rem;color:#555">Detalle de respuestas</p>';
+  QUESTIONS.forEach(function(q,i){var ok=rec.answers[i]===q.correct;det+='<div style="margin-bottom:0.75rem;padding:10px 13px;border-radius:8px;border:1px solid '+(ok?'#c8ecd8':'#f5c6c6')+';background:'+(ok?'#f4fdf7':'#fff8f8')+'"><p style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:3px">'+q.caso+'</p><p style="font-size:12px;color:#888;margin-bottom:4px">'+q.t+'</p><p class="'+(ok?'correct':'incorrect')+'" style="font-size:13px">'+(ok?'✓':'✗')+' '+q.opts[rec.answers[i]]+'</p>'+(ok?'':'<p class="ans-correct-note">Respuesta correcta: '+q.opts[q.correct]+'</p>')+'</div>';});
   det+='</div>';
   document.getElementById('res-detail').innerHTML=det;
   showScreen('s-result');
@@ -376,122 +272,47 @@ function showResult(rec){
 
 function goHome(){showScreen('s-welcome');document.getElementById('inp-nombre').value='';document.getElementById('inp-rut').value='';}
 function showAdmin(){showScreen('s-admin-login');document.getElementById('inp-pwd').value='';document.getElementById('err-pwd').textContent='';}
+function loginAdmin(){if(document.getElementById('inp-pwd').value===ADMIN_PWD){loadAdmin();showScreen('s-admin');}else{document.getElementById('err-pwd').textContent='Contraseña incorrecta.';}}
 
-function loginAdmin(){
-  if(document.getElementById('inp-pwd').value===ADMIN_PWD){loadAdmin();showScreen('s-admin');}
-  else{document.getElementById('err-pwd').textContent='Contraseña incorrecta.';}
-}
-
-async function loadAdmin(){
-  let arr=[];
-  try{let r=await window.storage.get('mpd_results');if(r)arr=JSON.parse(r.value);}catch(e){}
-  let total=arr.length, aprobados=arr.filter(a=>a.passed).length;
+function loadAdmin(){
+  var arr=[];try{arr=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){}
+  var total=arr.length,aprobados=arr.filter(function(a){return a.passed;}).length;
   document.getElementById('m-total').textContent=total;
   document.getElementById('m-aprobados').textContent=aprobados;
   document.getElementById('m-tasa').textContent=total?Math.round(aprobados/total*100)+'%':'0%';
-  window._adminData=arr;
-  renderChart(arr);
-  renderTable();
-  renderQStats(arr);
+  window._adminData=arr;renderChart(arr);renderTable();renderQStats(arr);
 }
 
 function renderChart(arr){
-  let correct=QUESTIONS.map((_,i)=>arr.filter(a=>a.answers[i]===QUESTIONS[i].correct).length);
-  let total=arr.length||1;
-  let html='<p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:0.75rem">% respuestas correctas por caso</p>';
-  QUESTIONS.forEach((q,i)=>{
-    let pct=Math.round(correct[i]/total*100);
-    let color=pct>=60?'#1D9E75':'#E24B4A';
-    html+=`<div style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-        <span style="color:var(--color-text-secondary)">${q.caso}</span>
-        <span style="font-weight:500">${pct}%</span>
-      </div>
-      <div style="height:8px;background:var(--color-background-secondary);border-radius:4px">
-        <div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width 0.4s"></div>
-      </div>
-    </div>`;
-  });
+  var total=arr.length||1,html='<p style="font-size:13px;font-weight:600;color:#555;margin-bottom:0.75rem">% respuestas correctas por caso</p>';
+  QUESTIONS.forEach(function(q,i){var correct=arr.filter(function(a){return a.answers[i]===q.correct;}).length,pct=Math.round(correct/total*100),color=pct>=60?'#1a7a4a':'#c0392b';html+='<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:#666">'+q.caso+'</span><span style="font-weight:600;color:'+color+'">'+pct+'%</span></div><div style="height:8px;background:#e8edf2;border-radius:4px"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:4px"></div></div></div>';});
   document.getElementById('chart-pregs').innerHTML=html;
 }
 
 function renderTable(){
-  let arr=window._adminData||[];
-  let fn=document.getElementById('f-nombre').value.toLowerCase();
-  let fe=document.getElementById('f-estado').value;
-  let filtered=arr.filter(a=>{
-    let matchN=!fn||a.name.toLowerCase().includes(fn)||a.rut.toLowerCase().includes(fn);
-    let matchE=!fe||(fe==='aprobado'?a.passed:!a.passed);
-    return matchN&&matchE;
-  });
-  let html='';
-  filtered.forEach(a=>{
-    let idx=arr.indexOf(a);
-    html+=`<tr>
-      <td style="font-weight:500">${a.name}</td>
-      <td style="color:var(--color-text-secondary)">${a.rut}</td>
-      <td>${a.score}/${QUESTIONS.length}</td>
-      <td><span class="badge ${a.passed?'badge-success':'badge-danger'}" style="font-size:11px">${a.passed?'Aprobado':'Reprobado'}</span></td>
-      <td style="color:var(--color-text-secondary);font-size:12px">${a.date}</td>
-      <td><button class="btn btn-sm" onclick="toggleDetail(${idx})">Ver respuestas</button></td>
-    </tr>
-    <tr><td colspan="6" style="padding:0">
-      <div class="detail-panel" id="dp-${idx}">
-        ${QUESTIONS.map((q,i)=>{
-          let ok=a.answers[i]===q.correct;
-          return `<div class="ans-block"><div class="ans-q">${q.caso}: ${q.t}</div><div class="ans-r ${ok?'correct':'incorrect'}">${ok?'✓':'✗'} ${q.opts[a.answers[i]]}</div>${!ok?`<div style="font-size:11px;color:var(--color-text-secondary)">Correcta: ${q.opts[q.correct]}</div>`:''}</div>`;
-        }).join('')}
-      </div>
-    </td></tr>`;
-  });
-  if(!html) html='<tr><td colspan="6" style="text-align:center;color:var(--color-text-secondary);padding:1.5rem">Sin resultados</td></tr>';
+  var arr=window._adminData||[],fn=document.getElementById('f-nombre').value.toLowerCase(),fe=document.getElementById('f-estado').value;
+  var filtered=arr.filter(function(a){return(!fn||a.name.toLowerCase().includes(fn)||a.rut.toLowerCase().includes(fn))&&(!fe||(fe==='aprobado'?a.passed:!a.passed));});
+  var html='';
+  filtered.forEach(function(a){var idx=arr.indexOf(a);html+='<tr><td style="font-weight:600">'+a.name+'</td><td style="color:#888">'+a.rut+'</td><td style="font-weight:600">'+a.score+'/'+QUESTIONS.length+'</td><td><span class="badge '+(a.passed?'badge-success':'badge-danger')+'" style="font-size:11px">'+(a.passed?'Aprobado':'Reprobado')+'</span></td><td style="color:#888;font-size:12px;white-space:nowrap">'+a.date+'</td><td><button class="btn btn-sm" onclick="toggleDetail('+idx+')">Ver</button></td></tr><tr><td colspan="6" style="padding:0"><div class="detail-panel" id="dp-'+idx+'">'+QUESTIONS.map(function(q,i){var ok=a.answers[i]===q.correct;return'<div class="ans-block"><div class="ans-q">'+q.caso+': '+q.t+'</div><div class="ans-r '+(ok?'correct':'incorrect')+'">'+(ok?'✓':'✗')+' '+q.opts[a.answers[i]]+'</div>'+(ok?'':'<div class="ans-correct-note">Correcta: '+q.opts[q.correct]+'</div>')+'</div>';}).join('')+'</div></td></tr>';});
+  if(!html)html='<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Sin resultados</td></tr>';
   document.getElementById('tbl-body').innerHTML=html;
 }
 
-function toggleDetail(i){
-  document.getElementById('dp-'+i).classList.toggle('open');
-}
+function toggleDetail(i){document.getElementById('dp-'+i).classList.toggle('open');}
 
 function renderQStats(arr){
-  let html='';
-  QUESTIONS.forEach((q,i)=>{
-    let counts=q.opts.map((_,j)=>arr.filter(a=>a.answers[i]===j).length);
-    let total=arr.length||1;
-    html+=`<div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary)">
-      <p style="font-size:11px;font-weight:500;color:#1a3a5c;margin-bottom:4px">${q.caso}</p>
-      <p style="font-size:14px;font-weight:500;margin-bottom:0.75rem">${q.t}</p>`;
-    q.opts.forEach((o,j)=>{
-      let pct=Math.round(counts[j]/total*100);
-      let isCorrect=j===q.correct;
-      html+=`<div style="margin-bottom:6px">
-        <div style="display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:3px">
-          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;background:${isCorrect?'var(--color-background-success)':'var(--color-background-secondary)'};color:${isCorrect?'var(--color-text-success)':'var(--color-text-secondary)'}">
-            ${String.fromCharCode(65+j)}
-          </span>
-          <span style="flex:1;color:var(--color-text-primary)">${o}</span>
-          <span style="font-weight:500;color:${isCorrect?'var(--color-text-success)':'var(--color-text-secondary)'}">${pct}% (${counts[j]})</span>
-        </div>
-        <div style="height:6px;background:var(--color-background-secondary);border-radius:3px;margin-left:26px">
-          <div style="height:100%;width:${pct}%;background:${isCorrect?'#1D9E75':'#B4B2A9'};border-radius:3px"></div>
-        </div>
-      </div>`;
-    });
+  var total=arr.length||1,html='';
+  QUESTIONS.forEach(function(q,i){
+    html+='<div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #e8edf2"><p style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:4px">'+q.caso+'</p><p style="font-size:14px;font-weight:600;margin-bottom:0.75rem;color:#1a1a1a">'+q.t+'</p>';
+    q.opts.forEach(function(o,j){var count=arr.filter(function(a){return a.answers[i]===j;}).length,pct=Math.round(count/total*100),isCorrect=j===q.correct;html+='<div style="margin-bottom:8px"><div style="display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:3px"><span style="width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:'+(isCorrect?'#e6f9f1':'#f0f4f8')+';color:'+(isCorrect?'#1a7a4a':'#888')+'">'+String.fromCharCode(65+j)+'</span><span style="flex:1;color:#333">'+o+'</span><span style="font-weight:700;color:'+(isCorrect?'#1a7a4a':'#888')+'">'+pct+'% ('+count+')</span></div><div style="height:6px;background:#e8edf2;border-radius:3px;margin-left:28px"><div style="height:100%;width:'+pct+'%;background:'+(isCorrect?'#1a7a4a':'#b0bec5')+';border-radius:3px"></div></div></div>';});
     html+='</div>';
   });
   document.getElementById('q-stats').innerHTML=html;
 }
 
-function switchTab(t){
-  ['resumen','detalle','preguntas'].forEach(id=>{
-    document.getElementById('tab-'+id).classList.toggle('active',id===t);
-    document.getElementById('panel-'+id).style.display=id===t?'block':'none';
-  });
-}
+function switchTab(t){['resumen','detalle','preguntas'].forEach(function(id){document.getElementById('tab-'+id).classList.toggle('active',id===t);document.getElementById('panel-'+id).style.display=id===t?'block':'none';});}
 
-async function clearData(){
-  if(!confirm('¿Seguro que quieres borrar todos los datos? Esta acción no se puede deshacer.')) return;
-  try{await window.storage.delete('mpd_results');}catch(e){}
-  window._adminData=[];
-  loadAdmin();
-}
+function clearData(){if(!confirm('¿Seguro que quieres borrar todos los datos? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(STORAGE_KEY);}catch(e){}window._adminData=[];loadAdmin();}
 </script>
+</body>
+</html>

@@ -243,15 +243,19 @@ function nextQ(){
   if(currentQ<QUESTIONS.length-1){currentQ++;renderQ();}else{submitEval();}
 }
 
-var SHEETS_URL="https://script.google.com/macros/s/AKfycbx6n4y3O8RBkvKyC8frS0b3sUdY2KWjRzGMn_nN4_-2S0vY2hEBxAX5zfLmTuI8VmvQ3A/exec";
+var SUPA_URL="https://dkemabkomutarxfotdno.supabase.co";
+var SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrZW1hYmtvbXV0YXJ4Zm90ZG5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNTE2OTIsImV4cCI6MjA5NzcyNzY5Mn0.eJpI9rb9FXPhE8guQNdk091wIR7MQ7w0sQfQffGtX7w";
+
+function supaHeaders(){return{"Content-Type":"application/json","apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY};}
 
 function submitEval(){
   var score=answers.filter(function(a,i){return a===QUESTIONS[i].correct;}).length;
   var passed=score>=PASS_SCORE;
-  var record={name:userName,rut:userRut,score:score,passed:passed,answers:answers.slice(),date:new Date().toLocaleString('es-CL')};
-  var btn=document.getElementById('btn-next');
-  btn.textContent='Enviando...';btn.disabled=true;
-  fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(record)})
+  var record={name:userName,rut:userRut,score:score,passed:passed,answers:answers.slice(),date:new Date().toLocaleString("es-CL")};
+  var btn=document.getElementById("btn-next");
+  btn.textContent="Enviando...";btn.disabled=true;
+  var payload={nombre:record.name,rut:record.rut,puntaje:record.score+"/5",estado:record.passed?"Aprobado":"Reprobado",fecha:record.date,caso_1:QUESTIONS[0].opts[record.answers[0]],caso_2:QUESTIONS[1].opts[record.answers[1]],caso_3:QUESTIONS[2].opts[record.answers[2]],caso_4:QUESTIONS[3].opts[record.answers[3]],caso_5:QUESTIONS[4].opts[record.answers[4]]};
+  fetch(SUPA_URL+"/rest/v1/resultados",{method:"POST",headers:supaHeaders(),body:JSON.stringify(payload)})
     .then(function(){showResult(record);})
     .catch(function(){showResult(record);})
     .finally(function(){btn.disabled=false;});
@@ -275,12 +279,36 @@ function showAdmin(){showScreen('s-admin-login');document.getElementById('inp-pw
 function loginAdmin(){if(document.getElementById('inp-pwd').value===ADMIN_PWD){loadAdmin();showScreen('s-admin');}else{document.getElementById('err-pwd').textContent='Contraseña incorrecta.';}}
 
 function loadAdmin(){
-  var arr=[];try{arr=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){}
-  var total=arr.length,aprobados=arr.filter(function(a){return a.passed;}).length;
-  document.getElementById('m-total').textContent=total;
-  document.getElementById('m-aprobados').textContent=aprobados;
-  document.getElementById('m-tasa').textContent=total?Math.round(aprobados/total*100)+'%':'0%';
-  window._adminData=arr;renderChart(arr);renderTable();renderQStats(arr);
+  document.getElementById("m-total").textContent="...";
+  document.getElementById("m-aprobados").textContent="...";
+  document.getElementById("m-tasa").textContent="...";
+  fetch(SUPA_URL+"/rest/v1/resultados?select=*&order=fecha.desc&limit=1000",{method:"GET",headers:supaHeaders()})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var arr=data.map(function(r){
+        return{
+          name:r.nombre,rut:r.rut,
+          score:parseInt(r.puntaje),
+          passed:r.estado==="Aprobado",
+          answers:[0,1,2,3,4].map(function(i){
+            var opts=QUESTIONS[i].opts,ans=r["caso_"+(i+1)];
+            var idx=opts.indexOf(ans);
+            return idx>=0?idx:0;
+          }),
+          date:r.fecha
+        };
+      });
+      var total=arr.length,aprobados=arr.filter(function(a){return a.passed;}).length;
+      document.getElementById("m-total").textContent=total;
+      document.getElementById("m-aprobados").textContent=aprobados;
+      document.getElementById("m-tasa").textContent=total?Math.round(aprobados/total*100)+"%":"0%";
+      window._adminData=arr;renderChart(arr);renderTable();renderQStats(arr);
+    })
+    .catch(function(){
+      document.getElementById("m-total").textContent="Error";
+      document.getElementById("m-aprobados").textContent="-";
+      document.getElementById("m-tasa").textContent="-";
+    });
 }
 
 function renderChart(arr){
@@ -312,7 +340,7 @@ function renderQStats(arr){
 
 function switchTab(t){['resumen','detalle','preguntas'].forEach(function(id){document.getElementById('tab-'+id).classList.toggle('active',id===t);document.getElementById('panel-'+id).style.display=id===t?'block':'none';});}
 
-function clearData(){if(!confirm('¿Seguro que quieres borrar todos los datos? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(STORAGE_KEY);}catch(e){}window._adminData=[];loadAdmin();}
+function clearData(){if(!confirm("¿Seguro que quieres borrar todos los datos? Esta acción no se puede deshacer."))return;fetch(SUPA_URL+"/rest/v1/resultados?id=gte.0",{method:"DELETE",headers:supaHeaders()}).then(function(){window._adminData=[];loadAdmin();}).catch(function(){alert("Error al borrar datos.");});}
 </script>
 </body>
 </html>
